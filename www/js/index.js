@@ -50,8 +50,16 @@ var app = {
         request.onload = function() {
           if (request.status >= 200 && request.status < 400) {
             // Success!
-            //var data = JSON.parse(request.responseText);
-            var data = request.responseText;
+            var data = JSON.parse(request.responseText);
+            //var data = request.responseText;
+            var theEle = document.getElementById('outDiv');
+            var eClass = theEle.className;
+            if (eClass.indexOf('hidden') >= 0 ) {
+               // we already have this element hidden so remove the class.
+               theEle.className = eClass.replace('hidden', '');            
+           }   
+            document.getElementById('isbnTitle').textContent = data.items[0].volumeInfo.title;
+            document.getElementById('isbnDesc').textContent = data.items[0].volumeInfo.description;
             console.log(data);
           } else {
             // We reached our target server, but it returned an error
@@ -67,5 +75,18 @@ var app = {
         request.send();        
     }
 };
+
+function toggleClass(eid, myclass) {
+  var theEle = document.getElementById(eid);
+  var eClass = theEle.className;
+ 
+  if (eClass.indexOf(myclass) >= 0 ) {
+     // we already have this element hidden so remove the class.
+     theEle.className = eClass.replace(myclass, '');
+  } else{
+     // add the class. 
+     theEle.className  +=  ' ' + myclass;
+  }
+}
 
 app.initialize();

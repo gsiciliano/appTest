@@ -58,7 +58,28 @@ body {
     margin:-115px 0px 0px -112px;  /* offset vertical: half of image height and text area height */
                                    /* offset horizontal: half of text area width */
 }
-
+.output {
+    position:relative;             /* position in the center of the screen */
+    left:50%;
+    top:50%;
+    height:50px;                   /* text area height */
+    width:400px;                   /* text area width */
+    text-align:center;
+    padding:0px;     /* image height is 200px (bottom 20px are overlapped with text) */
+    margin:650px 0px 0px -200px;  /* offset vertical: half of image height and text area height */
+                                   /* offset horizontal: half of text area width */
+}
+.output table{
+    /*margin-top: 10px; */
+    width: 100%;
+    border: #4B946A 0.5px;
+}
+.output tr td {
+    text-align: left;
+}
+.output tr th {
+    text-align: center;
+}
 /* Landscape layout (with min-width) */
 @media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
     .app {
@@ -115,4 +136,7 @@ h1 {
 }
 .btn {
     margin-top: 15px;
+}
+.hidden {
+  display:none;
 }
