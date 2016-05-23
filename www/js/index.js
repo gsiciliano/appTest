@@ -27,24 +27,44 @@ var app = {
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
+        document.getElementById('btnFind').addEventListener('click', this.buttonClick, false);
     },
     // deviceready Event Handler
     //
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        app.receivedEvent('deviceready');
+        app.receivedEvent();
     },
     // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
+    receivedEvent: function() {
+        console.log('Received Event: Device ready');
+    },
+    buttonClick: function(){
+        var base_url = 'https://www.googleapis.com/books/v1/volumes?q=isbn:';
+        var isbn = document.getElementById('edtISBN').value;
+        var url = base_url+isbn;
+        var request = new XMLHttpRequest();
+        request.open('GET', url, true);
 
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
+        request.onload = function() {
+          if (request.status >= 200 && request.status < 400) {
+            // Success!
+            //var data = JSON.parse(request.responseText);
+            var data = request.responseText;
+            console.log(data);
+          } else {
+            // We reached our target server, but it returned an error
+            console.log('error 1');
+          }
+        };
 
-        console.log('Received Event: ' + id);
+        request.onerror = function() {
+          // There was a connection error of some sort
+          console.log('error 2');
+        };
+
+        request.send();        
     }
 };
 
