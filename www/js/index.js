@@ -41,52 +41,68 @@ var app = {
         console.log('Received Event: Device ready');
     },
     buttonClick: function(){
+        utils.hideClass('outDiv');
+        utils.showClass('errDiv');
+        document.getElementById('errMsg').textContent = 'calling service...';
+        google.searchIsbn(document.getElementById('edtISBN').value, function(){
+            var data = JSON.parse(this.responseText);
+            if (data){
+                if (data.totalItems > 0){
+                    utils.showClass('outDiv');
+                    utils.hideClass('errDiv');
+                    document.getElementById('isbnTitle').textContent = data.items[0].volumeInfo.title;
+                    document.getElementById('isbnDesc').textContent = data.items[0].volumeInfo.description;
+                } else {
+                    utils.hideClass('outDiv');
+                    utils.showClass('errDiv');
+                    document.getElementById('errMsg').textContent = 'cannot find book!';
+                }
+            } else {
+                utils.hideClass('outDiv');
+                utils.showClass('errDiv');
+                document.getElementById('errMsg').textContent = 'OOPS! we got an error!';
+            }    
+        });
+    }
+};
+var utils = {
+    showClass: function(eid){
+        var el = document.getElementById(eid);
+        var cl = el.className;
+        if (cl.indexOf('hidden') >= 0 ) {
+           el.className = cl.replace('hidden', '');            
+        }   
+    },
+    hideClass: function(eid){
+        var el = document.getElementById(eid);
+        var cl = el.className;
+        if (cl.indexOf('hidden') < 0 ) {
+            el.className += cl+' hidden';            
+        }    
+    }
+};
+var google = {
+    searchIsbn: function(isbn, fCallBack){
         var base_url = 'https://www.googleapis.com/books/v1/volumes?q=isbn:';
-        var isbn = document.getElementById('edtISBN').value;
         var url = base_url+isbn;
         var request = new XMLHttpRequest();
+        request.callback = fCallBack;
         request.open('GET', url, true);
-
         request.onload = function() {
           if (request.status >= 200 && request.status < 400) {
             // Success!
-            var data = JSON.parse(request.responseText);
-            //var data = request.responseText;
-            var theEle = document.getElementById('outDiv');
-            var eClass = theEle.className;
-            if (eClass.indexOf('hidden') >= 0 ) {
-               // we already have this element hidden so remove the class.
-               theEle.className = eClass.replace('hidden', '');            
-           }   
-            document.getElementById('isbnTitle').textContent = data.items[0].volumeInfo.title;
-            document.getElementById('isbnDesc').textContent = data.items[0].volumeInfo.description;
-            console.log(data);
+            this.callback.apply(this);
           } else {
             // We reached our target server, but it returned an error
             console.log('error 1');
           }
         };
-
         request.onerror = function() {
           // There was a connection error of some sort
           console.log('error 2');
         };
-
         request.send();        
-    }
+    } 
 };
-
-function toggleClass(eid, myclass) {
-  var theEle = document.getElementById(eid);
-  var eClass = theEle.className;
- 
-  if (eClass.indexOf(myclass) >= 0 ) {
-     // we already have this element hidden so remove the class.
-     theEle.className = eClass.replace(myclass, '');
-  } else{
-     // add the class. 
-     theEle.className  +=  ' ' + myclass;
-  }
-}
 
 app.initialize();
