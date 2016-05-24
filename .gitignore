@@ -34,7 +34,7 @@ node_modules
 /nbproject/private/
 
 #plugins
-plugins/*
+plugins/
 
 #netbeans
 nbproject/
