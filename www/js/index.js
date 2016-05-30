@@ -95,11 +95,13 @@ var google = {
           } else {
             // We reached our target server, but it returned an error
             console.log('error 1');
+            this.callback.apply(null);
           }
         };
         request.onerror = function() {
           // There was a connection error of some sort
           console.log('error 2');
+          this.callback.apply();
         };
         request.send();        
     } 
