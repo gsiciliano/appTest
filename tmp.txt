@@ -1,0 +1,15 @@
+https://www.googleapis.com/books/v1/volumes?q=isbn:
+9788834706602
+
+9788808198655 zing 2013
+
+9788808332349 
+
+
+        <div class='output' id="outDiv">
+            <table>
+                <tr><th colspan="2">Output</th></tr>
+                <tr><td>Titolo</td><td><span id="isbnTitle"></span></td></tr>
+                <tr><td>Descrizione</td><td><span id="isbnDesc"></span></td></tr>
+            </table>    
+        </div>

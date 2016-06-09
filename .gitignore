@@ -3,6 +3,9 @@ logs
 *.log
 npm-debug.log*
 
+#backups
+*.rar
+
 # Runtime data
 pids
 *.pid
