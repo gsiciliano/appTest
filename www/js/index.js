@@ -27,7 +27,8 @@ var app = {
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
-        document.getElementById('btnFind').addEventListener('click', this.buttonClick, false);
+        document.getElementById('btnFind').addEventListener('click', this.btnFindClick, false);
+        document.getElementById('btnScan').addEventListener('click', this.btnScanClick, false);
     },
     // deviceready Event Handler
     //
@@ -40,71 +41,59 @@ var app = {
     receivedEvent: function() {
         console.log('Received Event: Device ready');
     },
-    buttonClick: function(){
-        utils.hideClass('outDiv');
-        utils.showClass('errDiv');
-        document.getElementById('errMsg').textContent = 'calling service...';
-        google.searchIsbn(document.getElementById('edtISBN').value, function(){
-            var data = JSON.parse(this.responseText);
-            if (data){
-                if (data.totalItems > 0){
-                    utils.showClass('outDiv');
-                    utils.hideClass('errDiv');
-                    document.getElementById('isbnTitle').textContent = data.items[0].volumeInfo.title;
-                    document.getElementById('isbnDesc').textContent = data.items[0].volumeInfo.description;
-                } else {
-                    utils.hideClass('outDiv');
-                    utils.showClass('errDiv');
-                    document.getElementById('errMsg').textContent = 'cannot find book!';
-                }
-            } else {
-                utils.hideClass('outDiv');
-                utils.showClass('errDiv');
-                document.getElementById('errMsg').textContent = 'OOPS! we got an error!';
-            }    
+    btnFindClick: function(){
+        searchBook(document.getElementById('edtISBN').value);
+    },
+    btnScanClick: function(){
+        cordova.plugins.barcodeScanner.scan(ScanOnSuccess,ScanOnError,      
+        {
+          "preferBackCamera" : true, // iOS and Android
+          "showFlipCameraButton" : true, // iOS and Android
+          "prompt" : "Visualizzare un codice all'interno dell'area di scansione", // supported on Android only
+         // "formats" : "QR_CODE,PDF_417,EAN_13,CODE_39", // default: all but PDF_417 and RSS_EXPANDED
+          "orientation" : "potrait" // Android only (portrait|landscape), default unset so it rotates with the device
         });
     }
 };
-var utils = {
-    showClass: function(eid){
-        var el = document.getElementById(eid);
-        var cl = el.className;
-        if (cl.indexOf('hidden') >= 0 ) {
-           el.className = cl.replace('hidden', '');            
-        }   
-    },
-    hideClass: function(eid){
-        var el = document.getElementById(eid);
-        var cl = el.className;
-        if (cl.indexOf('hidden') < 0 ) {
-            el.className += cl+' hidden';            
-        }    
-    }
-};
-var google = {
-    searchIsbn: function(isbn, fCallBack){
-        var base_url = 'https://www.googleapis.com/books/v1/volumes?q=isbn:';
-        var url = base_url+isbn;
-        var request = new XMLHttpRequest();
-        request.callback = fCallBack;
-        request.open('GET', url, true);
-        request.onload = function() {
-          if (request.status >= 200 && request.status < 400) {
-            // Success!
-            this.callback.apply(this);
-          } else {
-            // We reached our target server, but it returned an error
-            console.log('error 1');
-            this.callback.apply(null);
-          }
-        };
-        request.onerror = function() {
-          // There was a connection error of some sort
-          console.log('error 2');
-          this.callback.apply();
-        };
-        request.send();        
+function ScanOnSuccess(result) {
+    if (!result.cancelled) {
+      if (result.format == 'EAN_13'){
+        searchBook(result.text);
+      } else {
+        alert("Codice non supportato");  
+      }
     } 
-};
+}
+function ScanOnError(error) {
+    alert("Scanning failed: " + error);
+}
+function searchBook(isbn){
+    utils.hideClass('outDiv');
+    utils.showClass('errDiv');
+    document.getElementById('errMsg').textContent = 'calling service...';
+    google.searchIsbn(isbn, function(){
+        var data = JSON.parse(this.responseText);
+        if (data){
+            if (data.totalItems > 0){
+                utils.showClass('outDiv');
+                utils.hideClass('errDiv');
+                if (data.items[0].volumeInfo.title){
+                    document.getElementById('isbnTitle').textContent = data.items[0].volumeInfo.title;
+                }    
+                if (data.items[0].volumeInfo.description){
+                    document.getElementById('isbnDesc').textContent = data.items[0].volumeInfo.description;
+                }    
+            } else {
+                utils.hideClass('outDiv');
+                utils.showClass('errDiv');
+                document.getElementById('errMsg').textContent = 'cannot find book!';
+            }
+        } else {
+            utils.hideClass('outDiv');
+            utils.showClass('errDiv');
+            document.getElementById('errMsg').textContent = 'OOPS! we got an error!';
+        }    
+    });
+}
 
 app.initialize();

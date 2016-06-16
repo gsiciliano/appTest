@@ -37,11 +37,14 @@
     </head>
     <body>
         <div class="app">
-            <div>
+            <div class='btn'>
+                <button type='button' id='btnScan'>Scansione</button>
+            </div>
+            <div class='fld'>
                 <input type='text' id='edtISBN' placeholder="inserire ISBN">
             </div>
             <div class='btn'>
-                <button type='button' id='btnFind'>Cerca</button>
+                <button type='button' id='btnFind'>Trova</button>
             </div>
         </div>
         <div class="output hidden"  id="outDiv">
@@ -56,5 +59,7 @@
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/utils.js"></script>
+        <script type="text/javascript" src="js/google.js"></script>
     </body>
 </html>
