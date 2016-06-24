@@ -79,20 +79,16 @@
 	    },
 	    // Bind Event Listeners
 	    //
-	    // Bind any events that are required on startup. Common events are:
-	    // 'load', 'deviceready', 'offline', and 'online'.
 	    bindEvents: function() {
 	        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
 	        document.getElementById('btnFind').addEventListener('click', this.btnFindClick.bind(this), false);
 	        document.getElementById('btnScan').addEventListener('click', this.btnScanClick.bind(this), false);
 	    },
 	    // deviceready Event Handler
-	    //
-	    // The scope of 'this' is the event. In order to call the 'receivedEvent'
-	    // function, we must explicitly call 'app.receivedEvent(...);'
 	    onDeviceReady: function() {
 	        this.receivedEvent();
 	        var that = this;
+	        document.getElementById('myPos').textContent = 'wait for geolocation...';
 	        this.geocode.watchCurrPos(function(result){
 	            that.geocode.getAddrFromLatLng(result.latitude,result.longitude,that.render.renderGeocodeResult);
 	        });
