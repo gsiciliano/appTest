@@ -1,7 +1,7 @@
-var barcodeScanner = require('./barcodeScanner.js');
-var utils  = require('./utils.js');
-var render = require('./render.js');
-var google = require('./google.js');
+var barcodeScanner = require('./barcodeScanner');
+var utils  = require('./utils');
+var render = require('./render');
+var google = require('./google');
 
 app = {
     barcodeScanner: null,
