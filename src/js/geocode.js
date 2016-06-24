@@ -2,8 +2,7 @@ module.exports = {
     getCurrPos: function(callback){
         navigator.geolocation.getCurrentPosition(
                 function(position){
-                    
-                    callback('Lat: '+position.coords.latitude+' - Long: '+position.coords.longitude);
+                    callback(position.coords);
                 },
                 function(error){
                     callback(error.message);
