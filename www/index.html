@@ -28,7 +28,8 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *;connect-src 'self' https://www.googleapis.com">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; 
+                          media-src *;connect-src 'self' https://*.googleapis.com">
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
@@ -37,6 +38,10 @@
     </head>
     <body>
         <div class="app">
+            <div >
+                <p>Benvenuto! In questo momento ti trovi in:</p>
+                <p id="myPos"></p>
+            </div>
             <div class='btn'>
                 <button type='button' id='btnScan'>Scansione</button>
             </div>

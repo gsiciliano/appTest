@@ -8,7 +8,6 @@
         Gianluca Siciliano
     </author>
     <content src="index.html" />
-    <plugin name="cordova-plugin-whitelist" spec="1" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -25,5 +24,7 @@
     </platform>
     <engine name="browser" spec="~4.1.0" />
     <engine name="android" spec="~5.1.1" />
+    <plugin name="cordova-plugin-whitelist" spec="1" />
     <plugin name="phonegap-plugin-barcodescanner" spec="~5.0.0" />
+    <plugin name="cordova-plugin-geolocation" spec="~2.2.0" />
 </widget>

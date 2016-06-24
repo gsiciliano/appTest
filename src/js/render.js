@@ -22,5 +22,17 @@ module.exports =  {
             this.utils.showClass('errDiv');
             document.getElementById('errMsg').textContent = 'OOPS! we got an error!';
         }    
+    },
+    renderGeocodeResult: function(data){
+        if (data){
+            if (data.results.length > 0){
+                document.getElementById('myPos').textContent = data.results[0].formatted_address;       
+                console.log(data);
+            } else {
+                document.getElementById('myPos').textContent = 'OOPS! no addresses';       
+            }
+        } else {
+            document.getElementById('myPos').textContent = 'OOPS! render error';       
+        }    
     }
 };
