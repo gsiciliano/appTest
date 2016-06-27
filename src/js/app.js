@@ -4,6 +4,7 @@ module.exports = {
     render: null,
     google: null,
     geocode: null,
+    self:null,
     // Application Constructor
     initialize: function(barcodeScanner,utils, render, google, geocode) {
         this.bindEvents();
@@ -12,21 +13,23 @@ module.exports = {
         this.render = render;
         this.google = google;
         this.geocode = geocode;
+        self = this;
     },
     // Bind Event Listeners
     //
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
         document.getElementById('btnFind').addEventListener('click', this.btnFindClick.bind(this), false);
-        document.getElementById('btnScan').addEventListener('click', this.btnScanClick.bind(this), false);
+        document.getElementById('schNearby').addEventListener('click', this.btnSchNearby.bind(this), false);
+        document.getElementById('btnBack').addEventListener('click', this.btnBack.bind(this), false);
     },
     // deviceready Event Handler
     onDeviceReady: function() {
         this.receivedEvent();
-        var that = this;
+        //var that = this;
         document.getElementById('myPos').textContent = 'wait for geolocation...';
         this.geocode.watchCurrPos(function(result){
-            that.geocode.getAddrFromLatLng(result.latitude,result.longitude,that.render.renderGeocodeResult);
+            self.geocode.getAddrFromLatLng(result.latitude,result.longitude,self.render.renderGeocodeResult);
         });
         
     },
@@ -34,16 +37,37 @@ module.exports = {
     receivedEvent: function() {
         console.log('Received Event: Device ready');
     },
-    btnFindClick: function(){
-        this.searchBook(document.getElementById('edtISBN').value);
+    btnBack: function(){
+        this.utils.showClass('app');
+        this.utils.hideClass('outDiv');
+        document.getElementById('outDiv').removeChild(document.getElementById('output'));
+        document.getElementById('edtISBN').value = '';
     },
-    btnScanClick: function(){
-        this.barcodeScanner.scan(this.searchBook.bind(this),this.render.renderResult.bind(this)); 
+    btnFindClick: function(){
+        if (document.getElementById('edtISBN').value){
+            this.searchBook(document.getElementById('edtISBN').value);
+        } else {
+            this.barcodeScanner.scan(this.searchBook.bind(this),this.render.renderSearchResult.bind(this)); 
+        }    
+    },
+    btnSchNearby: function(){
+        this.utils.hideClass('app');
+        this.utils.showClass('outDiv');
+        var outDiv = document.createElement('div');
+        outDiv.id = 'msg';
+        outDiv.innerHTML = 'calling service...';
+        document.getElementById('outDiv').appendChild(outDiv);
+        this.geocode.getCurrPos(function(result){
+            self.geocode.getNearByPlaces(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
+        });
     },
     searchBook: function(isbn){
-        this.utils.hideClass('outDiv');
-        this.utils.showClass('errDiv');
-        document.getElementById('errMsg').textContent = 'calling service...';
-        this.google.searchIsbn(isbn, this.render.renderResult.bind(this));
+        this.utils.hideClass('app');
+        this.utils.showClass('outDiv');
+        var outDiv = document.createElement('div');
+        outDiv.id = 'msg';
+        outDiv.innerHTML = 'calling service...';
+        document.getElementById('outDiv').appendChild(outDiv);
+        this.google.searchIsbn(isbn, this.render.renderSearchResult);
     }
 };

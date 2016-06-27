@@ -17,4 +17,5 @@ https://www.googleapis.com/books/v1/volumes?q=isbn:
         </div>
 
 
-https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=36.9528512,14.5342839&radius=1000&types=school&key=AIzaSyD72rJop2VZYj7H6eUOZOvWskDLKW2UZvE
+https://maps.googleapis.com/maps/api/place/nearbysearch/json?
+location=36.9528512,14.5342839&radius=1000&types=school&key=AIzaSyD72rJop2VZYj7H6eUOZOvWskDLKW2UZvE

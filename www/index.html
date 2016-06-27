@@ -28,7 +28,7 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; 
+        <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; 
                           media-src *;connect-src 'self' https://*.googleapis.com">
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
@@ -37,30 +37,23 @@
         <title>Test APP</title>
     </head>
     <body>
-        <div class="app">
+        <div class="app" id="app">
             <div >
                 <p>Benvenuto! In questo momento ti trovi in:</p>
                 <p id="myPos"></p>
             </div>
             <div class='btn'>
-                <button type='button' id='btnScan'>Scansione</button>
+                <button type='button' id='schNearby'>Scuole vicine a te</button>
             </div>
             <div class='fld'>
                 <input type='text' id='edtISBN' placeholder="inserire ISBN">
             </div>
             <div class='btn'>
-                <button type='button' id='btnFind'>Trova</button>
+                <button type='button' id='btnFind'>Trova/Scansiona</button>
             </div>
         </div>
         <div class="output hidden"  id="outDiv">
-            <table>
-                <tr><th colspan="2">Output</th></tr>
-                <tr><td>Titolo</td><td><strong><span id="isbnTitle"></span></strong></td></tr>
-                <tr><td>Descrizione</td><td><strong><span id="isbnDesc"></span></strong></td></tr>
-            </table>    
-        </div>
-        <div class="output hidden"  id="errDiv">
-            <strong><span id="errMsg"></span></strong>
+            <button type='button' id='btnBack'>Indietro</button>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/app.bundle.js"></script>

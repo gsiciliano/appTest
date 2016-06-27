@@ -10,7 +10,7 @@ module.exports =  {
         var el = document.getElementById(eid);
         var cl = el.className;
         if (cl.indexOf('hidden') < 0 ) {
-            el.className += cl+' hidden';            
+            el.className += ' hidden';            
         }    
     }
 };
