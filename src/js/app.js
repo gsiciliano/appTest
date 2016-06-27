@@ -40,34 +40,31 @@ module.exports = {
     btnBack: function(){
         this.utils.showClass('app');
         this.utils.hideClass('outDiv');
-        document.getElementById('outDiv').removeChild(document.getElementById('output'));
+        var output = document.getElementById('output');
+        if (output) {
+            document.getElementById('outDiv').removeChild(output);
+        }    
         document.getElementById('edtISBN').value = '';
     },
     btnFindClick: function(){
+        this.utils.hideClass('app');
+        this.utils.showClass('outDiv');
+        document.getElementById('outDiv').appendChild(this.render.renderWaiting());
         if (document.getElementById('edtISBN').value){
             this.searchBook(document.getElementById('edtISBN').value);
         } else {
-            this.barcodeScanner.scan(this.searchBook.bind(this),this.render.renderSearchResult.bind(this)); 
+            this.barcodeScanner.scan(this.searchBook,this.render.renderSearchResult); 
         }    
     },
     btnSchNearby: function(){
         this.utils.hideClass('app');
         this.utils.showClass('outDiv');
-        var outDiv = document.createElement('div');
-        outDiv.id = 'msg';
-        outDiv.innerHTML = 'calling service...';
-        document.getElementById('outDiv').appendChild(outDiv);
+        document.getElementById('outDiv').appendChild(this.render.renderWaiting());
         this.geocode.getCurrPos(function(result){
             self.geocode.getNearByPlaces(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
         });
     },
     searchBook: function(isbn){
-        this.utils.hideClass('app');
-        this.utils.showClass('outDiv');
-        var outDiv = document.createElement('div');
-        outDiv.id = 'msg';
-        outDiv.innerHTML = 'calling service...';
-        document.getElementById('outDiv').appendChild(outDiv);
-        this.google.searchIsbn(isbn, this.render.renderSearchResult);
+        self.google.searchIsbn(isbn, self.render.renderSearchResult);
     }
 };

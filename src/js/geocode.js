@@ -14,7 +14,7 @@ module.exports = {
                     callback(position.coords);
                 },
                 function(error){
-                    console.log(error.message);
+                    callback(error.message);
                 },
                 { maximumAge: 3000, timeout: 5000});
     },
@@ -50,7 +50,6 @@ module.exports = {
           if (request.status >= 200 && request.status < 400) {
             // Success!
             callback(JSON.parse(request.responseText));
-            console.log(JSON.parse(request.responseText));
           } else {
             // We reached our target server, but it returned an error
             console.log('error 1');

@@ -4,6 +4,8 @@ module.exports = {
             function (result) {
                 if(!result.cancelled) {
                     callback(result.text, render);
+                } else {
+                    callback(null, render);
                 }
             },
             function (error) {

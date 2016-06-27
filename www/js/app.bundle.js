@@ -104,35 +104,32 @@
 	    btnBack: function(){
 	        this.utils.showClass('app');
 	        this.utils.hideClass('outDiv');
-	        document.getElementById('outDiv').removeChild(document.getElementById('output'));
+	        var output = document.getElementById('output');
+	        if (output) {
+	            document.getElementById('outDiv').removeChild(output);
+	        }    
 	        document.getElementById('edtISBN').value = '';
 	    },
 	    btnFindClick: function(){
+	        this.utils.hideClass('app');
+	        this.utils.showClass('outDiv');
+	        document.getElementById('outDiv').appendChild(this.render.renderWaiting());
 	        if (document.getElementById('edtISBN').value){
 	            this.searchBook(document.getElementById('edtISBN').value);
 	        } else {
-	            this.barcodeScanner.scan(this.searchBook.bind(this),this.render.renderSearchResult.bind(this)); 
+	            this.barcodeScanner.scan(this.searchBook,this.render.renderSearchResult); 
 	        }    
 	    },
 	    btnSchNearby: function(){
 	        this.utils.hideClass('app');
 	        this.utils.showClass('outDiv');
-	        var outDiv = document.createElement('div');
-	        outDiv.id = 'msg';
-	        outDiv.innerHTML = 'calling service...';
-	        document.getElementById('outDiv').appendChild(outDiv);
+	        document.getElementById('outDiv').appendChild(this.render.renderWaiting());
 	        this.geocode.getCurrPos(function(result){
 	            self.geocode.getNearByPlaces(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
 	        });
 	    },
 	    searchBook: function(isbn){
-	        this.utils.hideClass('app');
-	        this.utils.showClass('outDiv');
-	        var outDiv = document.createElement('div');
-	        outDiv.id = 'msg';
-	        outDiv.innerHTML = 'calling service...';
-	        document.getElementById('outDiv').appendChild(outDiv);
-	        this.google.searchIsbn(isbn, this.render.renderSearchResult);
+	        self.google.searchIsbn(isbn, self.render.renderSearchResult);
 	    }
 	};
 
@@ -149,6 +146,8 @@
 	            function (result) {
 	                if(!result.cancelled) {
 	                    callback(result.text, render);
+	                } else {
+	                    callback(null, render);
 	                }
 	            },
 	            function (error) {
@@ -201,28 +200,28 @@
 
 	module.exports =  {
 	    renderSearchResult: function(data){
+	        document.getElementById('outDiv').removeChild(document.getElementById('msg'));
 	        if (data){
+	            var baseDiv = document.createElement('div');
+	            baseDiv.id='output';
 	            if (data.totalItems > 0){
-	                document.getElementById('outDiv').removeChild(document.getElementById('msg'));
-	                var baseDiv = document.createElement('div');
-	                baseDiv.id='output';
 	                if (data.items[0].volumeInfo.title){
 	                    var outDiv = document.createElement('div');
-	                    outDiv.innerHTML = 'Titolo: '+data.items[0].volumeInfo.title;
+	                    outDiv.innerHTML = 'Titolo: <b>'+data.items[0].volumeInfo.title+'</b>';
 	                    baseDiv.appendChild(outDiv);
 	                }    
 	                if (data.items[0].volumeInfo.description){
 	                    var outDiv = document.createElement('div');
-	                    outDiv.innerHTML = 'Descr: '+data.items[0].volumeInfo.description;
+	                    outDiv.innerHTML = 'Descr: <b>'+data.items[0].volumeInfo.description+'</b>';
 	                    baseDiv.appendChild(outDiv);
 	                }    
-	                document.getElementById('outDiv').appendChild(baseDiv);
 	            } else {
-	                document.getElementById('msg').textContent = 'cannot find book!';
+	                baseDiv.textContent = 'cannot find book!';
 	            }
 	        } else {
-	            document.getElementById('msg').textContent = 'OOPS! we got an error!';
+	            baseDiv.textContent = 'OOPS! we got an error!';
 	        }    
+	        document.getElementById('outDiv').appendChild(baseDiv);
 	    },
 	    renderGeocodeResult: function(data){
 	        if (data){
@@ -236,22 +235,35 @@
 	        }    
 	    },
 	    renderNearbyPlaces: function(data){
+	        document.getElementById('outDiv').removeChild(document.getElementById('msg'));
+	        var baseDiv = document.createElement('div');
+	        baseDiv.id='output';
 	        if (data){
-	            document.getElementById('outDiv').removeChild(document.getElementById('msg'));
-	            var baseDiv = document.createElement('div');
-	            baseDiv.id='output';
+	            var outUl = document.createElement('ul');
 	            for (i=0;i<data.results.length;i++){
-	                var outDiv = document.createElement('div');
-	                var outDivSpan1 = document.createElement('p');
-	                outDivSpan1.innerHTML = 'Nome:'+data.results[i].name;
-	                outDiv.appendChild(outDivSpan1);
-	                var outDivSpan2 = document.createElement('p');
-	                outDivSpan2.innerHTML = 'Ind:'+data.results[i].vicinity;
-	                outDiv.appendChild(outDivSpan2);
-	                baseDiv.appendChild(outDiv);
+	                var outUlLi = document.createElement('li');
+	                outUlLi.innerHTML = '<b>'+data.results[i].name+'</b>'+'<br>'+data.results[i].vicinity;
+	                //var outDiv = document.createElement('div');
+	                //var outDivSpan1 = document.createElement('p');
+	                //outDivSpan1.innerHTML = 'Nome:'+data.results[i].name;
+	                //outDiv.appendChild(outDivSpan1);
+	                //var outDivSpan2 = document.createElement('p');
+	                //outDivSpan2.innerHTML = 'Ind:'+data.results[i].vicinity;
+	                //outDiv.appendChild(outDivSpan2);
+	                //baseDiv.appendChild(outDiv);
+	                outUl.appendChild(outUlLi);
 	            }    
-	            document.getElementById('outDiv').appendChild(baseDiv);
+	            baseDiv.appendChild(outUl);
+	        } else {
+	            baseDiv.textContent = 'No places founded!';
 	        }
+	        document.getElementById('outDiv').appendChild(baseDiv);
+	    },
+	    renderWaiting: function(){
+	        var outDiv = document.createElement('div');
+	        outDiv.id = 'msg';
+	        outDiv.innerHTML = '<img src="img/loading.gif" style="width:100%;heght:100%">';
+	        return outDiv;
 	    }
 	};
 
@@ -310,7 +322,7 @@
 	                    callback(position.coords);
 	                },
 	                function(error){
-	                    console.log(error.message);
+	                    callback(error.message);
 	                },
 	                { maximumAge: 3000, timeout: 5000});
 	    },
@@ -346,7 +358,6 @@
 	          if (request.status >= 200 && request.status < 400) {
 	            // Success!
 	            callback(JSON.parse(request.responseText));
-	            console.log(JSON.parse(request.responseText));
 	          } else {
 	            // We reached our target server, but it returned an error
 	            console.log('error 1');
