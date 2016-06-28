@@ -61,8 +61,11 @@ module.exports = {
         this.utils.showClass('outDiv');
         document.getElementById('outDiv').appendChild(this.render.renderWaiting());
         this.geocode.getCurrPos(function(result){
-            self.geocode.getNearByPlaces(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
-        });
+            self.geocode.getNearByPlacesJS(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
+        });    
+//        this.geocode.getCurrPos(function(result){
+//            self.geocode.getNearByPlaces(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
+//        });
     },
     searchBook: function(isbn){
         self.google.searchIsbn(isbn, self.render.renderSearchResult);

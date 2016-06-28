@@ -28,7 +28,7 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-        <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; 
+        <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src * 'unsafe-inline'; 
                           media-src *;connect-src 'self' https://*.googleapis.com">
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
@@ -44,7 +44,7 @@
                 <p id="myPos"></p>
             </div>
             <div class='btn'>
-                <button type='button' id='schNearby'>Scuole vicine a te</button>
+                <button type='button' id='schNearby'>Scuole entro 1Km dalla tua posizione</button>
             </div>
             <div class='fld'>
                 <input type='text' id='edtISBN' placeholder="inserire ISBN">
@@ -56,7 +56,9 @@
         <div class="output hidden"  id="outDiv">
             <button type='button' id='btnBack' style="margin-bottom:10px">Indietro</button>
         </div>
+        <div class="hidden" id="map"></div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/app.bundle.js"></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD72rJop2VZYj7H6eUOZOvWskDLKW2UZvE&libraries=places"></script>
     </body>
 </html>

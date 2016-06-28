@@ -125,8 +125,11 @@
 	        this.utils.showClass('outDiv');
 	        document.getElementById('outDiv').appendChild(this.render.renderWaiting());
 	        this.geocode.getCurrPos(function(result){
-	            self.geocode.getNearByPlaces(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
-	        });
+	            self.geocode.getNearByPlacesJS(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
+	        });    
+	//        this.geocode.getCurrPos(function(result){
+	//            self.geocode.getNearByPlaces(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
+	//        });
 	    },
 	    searchBook: function(isbn){
 	        self.google.searchIsbn(isbn, self.render.renderSearchResult);
@@ -240,9 +243,9 @@
 	        baseDiv.id='output';
 	        if (data){
 	            var outUl = document.createElement('ul');
-	            for (i=0;i<data.results.length;i++){
+	            for (i=0;i<data.length;i++){
 	                var outUlLi = document.createElement('li');
-	                outUlLi.innerHTML = '<b>'+data.results[i].name+'</b>'+'<br>'+data.results[i].vicinity;
+	                outUlLi.innerHTML = '<b>'+data[i].name+'</b>'+'<br>'+data[i].vicinity;
 	                //var outDiv = document.createElement('div');
 	                //var outDivSpan1 = document.createElement('p');
 	                //outDivSpan1.innerHTML = 'Nome:'+data.results[i].name;
@@ -357,7 +360,8 @@
 	        request.onload = function() {
 	          if (request.status >= 200 && request.status < 400) {
 	            // Success!
-	            callback(JSON.parse(request.responseText));
+	            var data = JSON.parse(request.responseText);
+	            callback(data.results);
 	          } else {
 	            // We reached our target server, but it returned an error
 	            console.log('error 1');
@@ -368,6 +372,25 @@
 	          console.log('error 2');
 	        };
 	        request.send();        
+	        
+	    },
+	    getNearByPlacesJS: function(radius,placeTag,lat,lng,callback){
+	            var myLoc = {lat: lat, lng: lng};
+	            var map = new google.maps.Map(document.getElementById('map'), {
+	                center: myLoc,
+	                zoom: 15
+	            });
+	            var request = {
+	                location: myLoc,
+	                radius: radius,
+	                types: [placeTag]
+	            };
+	            service = new google.maps.places.PlacesService(map);
+	            service.nearbySearch(request, function(results, status){
+	                  if (status == google.maps.places.PlacesServiceStatus.OK) {
+	                    callback(results);  
+	                  }
+	            });
 	        
 	    }
 	};

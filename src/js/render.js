@@ -40,9 +40,9 @@ module.exports =  {
         baseDiv.id='output';
         if (data){
             var outUl = document.createElement('ul');
-            for (i=0;i<data.results.length;i++){
+            for (i=0;i<data.length;i++){
                 var outUlLi = document.createElement('li');
-                outUlLi.innerHTML = '<b>'+data.results[i].name+'</b>'+'<br>'+data.results[i].vicinity;
+                outUlLi.innerHTML = '<b>'+data[i].name+'</b>'+'<br>'+data[i].vicinity;
                 //var outDiv = document.createElement('div');
                 //var outDivSpan1 = document.createElement('p');
                 //outDivSpan1.innerHTML = 'Nome:'+data.results[i].name;

@@ -49,7 +49,8 @@ module.exports = {
         request.onload = function() {
           if (request.status >= 200 && request.status < 400) {
             // Success!
-            callback(JSON.parse(request.responseText));
+            var data = JSON.parse(request.responseText);
+            callback(data.results);
           } else {
             // We reached our target server, but it returned an error
             console.log('error 1');
@@ -60,6 +61,25 @@ module.exports = {
           console.log('error 2');
         };
         request.send();        
+        
+    },
+    getNearByPlacesJS: function(radius,placeTag,lat,lng,callback){
+            var myLoc = {lat: lat, lng: lng};
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: myLoc,
+                zoom: 15
+            });
+            var request = {
+                location: myLoc,
+                radius: radius,
+                types: [placeTag]
+            };
+            service = new google.maps.places.PlacesService(map);
+            service.nearbySearch(request, function(results, status){
+                  if (status == google.maps.places.PlacesServiceStatus.OK) {
+                    callback(results);  
+                  }
+            });
         
     }
 };
