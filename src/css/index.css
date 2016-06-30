@@ -123,12 +123,14 @@ h1 {
     animation:fade 3000ms infinite;
     -webkit-animation:fade 3000ms infinite;
 }
+/*
 .btn {
     margin-top: 15px;
 }
 .fld {
     margin-top: 15px;
 }
+*/
 .hidden {
   display:none;
 }

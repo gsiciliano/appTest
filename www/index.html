@@ -33,32 +33,31 @@
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link rel="stylesheet" type="text/css" href="dist/style.bundle.css">
         <title>Test APP</title>
     </head>
     <body>
         <div class="app" id="app">
-            <div >
+            <div class="input-group">
                 <h3>Benvenuto! </h3>
-                <p>In questo momento ti trovi in:</p>
-                <p id="myPos"></p>
-            </div>
-            <div class='btn'>
-                <button type='button' id='schNearby'>Scuole entro 1Km dalla tua posizione</button>
-            </div>
-            <div class='fld'>
-                <input type='text' id='edtISBN' placeholder="inserire ISBN">
-            </div>
-            <div class='btn'>
-                <button type='button' id='btnFind'>Trova/Scansiona</button>
-            </div>
+                <span>In questo momento ti trovi in:</span>
+                <span id="myPos"></span>
+                <a href="#" id='schNearby' class="btn btn-default"><span class="glyphicon glyphicon-map-marker"></span>
+                Trova suole</a>
+            </div>                
+            <div class="input-group">
+                <input type='text' id='edtISBN' type="text" class="form-control" placeholder="inserire ISBN">
+                <a href="#" id='btnFind' class="btn btn-default"><span class="glyphicon glyphicon-barcode"></span>
+                Trova/Scansiona</a>
+            </div>                
         </div>
         <div class="output hidden"  id="outDiv">
-            <button type='button' id='btnBack' style="margin-bottom:10px">Indietro</button>
+            <a href="#" id='btnBack' class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-left"></span>
+            Indietro</a>
         </div>
         <div class="hidden" id="map"></div>
         <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/app.bundle.js"></script>
+        <script type="text/javascript" src="dist/app.bundle.js"></script>
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD72rJop2VZYj7H6eUOZOvWskDLKW2UZvE&libraries=places"></script>
     </body>
 </html>

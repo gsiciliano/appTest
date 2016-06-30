@@ -1,3 +1,4 @@
+var storage = require('./storage');
 module.exports = {
     barcodeScanner: null,
     utils: null,
@@ -5,14 +6,16 @@ module.exports = {
     google: null,
     geocode: null,
     self:null,
+    storage :null,
     // Application Constructor
-    initialize: function(barcodeScanner,utils, render, google, geocode) {
+    initialize: function(barcodeScanner,utils, render, google, geocode, storage) {
         this.bindEvents();
         this.barcodeScanner = barcodeScanner;
         this.utils = utils;
         this.render = render;
         this.google = google;
         this.geocode = geocode;
+        this.storage = storage;
         self = this;
     },
     // Bind Event Listeners
@@ -37,7 +40,8 @@ module.exports = {
     receivedEvent: function() {
         console.log('Received Event: Device ready');
     },
-    btnBack: function(){
+    btnBack: function(event){
+        event.preventDefault();
         this.utils.showClass('app');
         this.utils.hideClass('outDiv');
         var output = document.getElementById('output');
@@ -46,7 +50,8 @@ module.exports = {
         }    
         document.getElementById('edtISBN').value = '';
     },
-    btnFindClick: function(){
+    btnFindClick: function(event){
+        event.preventDefault();
         this.utils.hideClass('app');
         this.utils.showClass('outDiv');
         document.getElementById('outDiv').appendChild(this.render.renderWaiting());
@@ -56,18 +61,28 @@ module.exports = {
             this.barcodeScanner.scan(this.searchBook,this.render.renderSearchResult); 
         }    
     },
-    btnSchNearby: function(){
+    btnSchNearby: function(event){
+        event.preventDefault();
         this.utils.hideClass('app');
         this.utils.showClass('outDiv');
         document.getElementById('outDiv').appendChild(this.render.renderWaiting());
         this.geocode.getCurrPos(function(result){
             self.geocode.getNearByPlacesJS(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
         });    
-//        this.geocode.getCurrPos(function(result){
-//            self.geocode.getNearByPlaces(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
-//        });
+/*        
+        this call does not work in browser 
+        this.geocode.getCurrPos(function(result){
+            self.geocode.getNearByPlaces(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
+        });
+*/
     },
     searchBook: function(isbn){
-        self.google.searchIsbn(isbn, self.render.renderSearchResult);
+        storage.getData(isbn, function(result){
+            if (result){
+                self.render.renderSearchResult(result);
+            } else {
+                self.google.searchIsbn(isbn, self.render.renderSearchResult);
+            }    
+        });
     }
 };
