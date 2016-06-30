@@ -1,3 +1,5 @@
+var bootstrap = require('bootstrap/dist/css/bootstrap.css');
+var css = require('../css/index.css');
 var app = require ('./app');
 var barcodeScanner = require('./scanner');
 var utils  = require('./utils');

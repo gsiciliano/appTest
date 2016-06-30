@@ -1,3 +1,4 @@
+var storage = require('./storage');
 module.exports = {
     barcodeScanner: null,
     utils: null,
@@ -5,14 +6,16 @@ module.exports = {
     google: null,
     geocode: null,
     self:null,
+    storage :null,
     // Application Constructor
-    initialize: function(barcodeScanner,utils, render, google, geocode) {
+    initialize: function(barcodeScanner,utils, render, google, geocode, storage) {
         this.bindEvents();
         this.barcodeScanner = barcodeScanner;
         this.utils = utils;
         this.render = render;
         this.google = google;
         this.geocode = geocode;
+        this.storage = storage;
         self = this;
     },
     // Bind Event Listeners
@@ -63,11 +66,19 @@ module.exports = {
         this.geocode.getCurrPos(function(result){
             self.geocode.getNearByPlacesJS(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
         });    
-//        this.geocode.getCurrPos(function(result){
-//            self.geocode.getNearByPlaces(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
-//        });
+/*        
+        this call does not work in browser 
+        this.geocode.getCurrPos(function(result){
+            self.geocode.getNearByPlaces(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
+        });
+*/
     },
     searchBook: function(isbn){
-        self.google.searchIsbn(isbn, self.render.renderSearchResult);
+        var volumeInfo = storage.getData(isbn);
+        if (volumeInfo){
+            self.render.SearchResult(volumeInfo);
+        } else {
+            self.google.searchIsbn(isbn, self.render.renderSearchResult);
+        }    
     }
 };

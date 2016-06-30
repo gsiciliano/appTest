@@ -1,25 +1,22 @@
 module.exports =  {
     renderSearchResult: function(data){
+        // data is volumeInfo
         document.getElementById('outDiv').removeChild(document.getElementById('msg'));
         if (data){
             var baseDiv = document.createElement('div');
             baseDiv.id='output';
-            if (data.totalItems > 0){
-                if (data.items[0].volumeInfo.title){
-                    var outDiv = document.createElement('div');
-                    outDiv.innerHTML = 'Titolo: <b>'+data.items[0].volumeInfo.title+'</b>';
-                    baseDiv.appendChild(outDiv);
-                }    
-                if (data.items[0].volumeInfo.description){
-                    var outDiv = document.createElement('div');
-                    outDiv.innerHTML = 'Descr: <b>'+data.items[0].volumeInfo.description+'</b>';
-                    baseDiv.appendChild(outDiv);
-                }    
-            } else {
-                baseDiv.textContent = 'cannot find book!';
-            }
+            if (data.title){
+                var outDiv = document.createElement('div');
+                outDiv.innerHTML = 'Titolo: <b>'+data.title+'</b>';
+                baseDiv.appendChild(outDiv);
+            }    
+            if (data.description){
+                var outDiv = document.createElement('div');
+                outDiv.innerHTML = 'Descr: <b>'+data.description+'</b>';
+                baseDiv.appendChild(outDiv);
+            }    
         } else {
-            baseDiv.textContent = 'OOPS! we got an error!';
+            baseDiv.textContent = 'cannot find book!';
         }    
         document.getElementById('outDiv').appendChild(baseDiv);
     },
@@ -43,14 +40,6 @@ module.exports =  {
             for (i=0;i<data.length;i++){
                 var outUlLi = document.createElement('li');
                 outUlLi.innerHTML = '<b>'+data[i].name+'</b>'+'<br>'+data[i].vicinity;
-                //var outDiv = document.createElement('div');
-                //var outDivSpan1 = document.createElement('p');
-                //outDivSpan1.innerHTML = 'Nome:'+data.results[i].name;
-                //outDiv.appendChild(outDivSpan1);
-                //var outDivSpan2 = document.createElement('p');
-                //outDivSpan2.innerHTML = 'Ind:'+data.results[i].vicinity;
-                //outDiv.appendChild(outDivSpan2);
-                //baseDiv.appendChild(outDiv);
                 outUl.appendChild(outUlLi);
             }    
             baseDiv.appendChild(outUl);
