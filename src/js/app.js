@@ -8,14 +8,13 @@ module.exports = {
     self:null,
     storage :null,
     // Application Constructor
-    initialize: function(barcodeScanner,utils, render, google, geocode, storage) {
+    initialize: function(barcodeScanner,utils, render, google, geocode) {
         this.bindEvents();
         this.barcodeScanner = barcodeScanner;
         this.utils = utils;
         this.render = render;
         this.google = google;
         this.geocode = geocode;
-        this.storage = storage;
         self = this;
     },
     // Bind Event Listeners
@@ -30,7 +29,7 @@ module.exports = {
     onDeviceReady: function() {
         this.receivedEvent();
         //var that = this;
-        document.getElementById('myPos').textContent = 'wait for geolocation...';
+        document.getElementById('myPos').innerHTML = 'wait for geolocation...';
         this.geocode.watchCurrPos(function(result){
             self.geocode.getAddrFromLatLng(result.latitude,result.longitude,self.render.renderGeocodeResult);
         });
@@ -46,7 +45,7 @@ module.exports = {
         this.utils.hideClass('outDiv');
         var output = document.getElementById('output');
         if (output) {
-            document.getElementById('outDiv').removeChild(output);
+            document.getElementById('renderDiv').innerHTML='';
         }    
         document.getElementById('edtISBN').value = '';
     },
@@ -54,7 +53,7 @@ module.exports = {
         event.preventDefault();
         this.utils.hideClass('app');
         this.utils.showClass('outDiv');
-        document.getElementById('outDiv').appendChild(this.render.renderWaiting());
+        document.getElementById('renderDiv').appendChild(this.render.renderWaiting());
         if (document.getElementById('edtISBN').value){
             this.searchBook(document.getElementById('edtISBN').value);
         } else {
@@ -65,7 +64,7 @@ module.exports = {
         event.preventDefault();
         this.utils.hideClass('app');
         this.utils.showClass('outDiv');
-        document.getElementById('outDiv').appendChild(this.render.renderWaiting());
+        document.getElementById('renderDiv').appendChild(this.render.renderWaiting());
         this.geocode.getCurrPos(function(result){
             self.geocode.getNearByPlacesJS(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
         });    

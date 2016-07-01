@@ -1,17 +1,17 @@
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var path = require("path");
 module.exports = {
     entry: {
             app: './src/js/index' 
     },
     output: {
-        path: './www/dist',
+        path: path.resolve(__dirname, "www/dist"),
         filename: '[name].bundle.js'
     },
     devtools: 'source-map',
     devServer: {
        historyApiFallback: true,
-       contentBase: './platforms/browser/www',
-       https: true,
+       contentBase: ("./platforms/browser/www"),
        headers: {
          "Access-Control-Allow-Origin": "*",
          "Access-Control-Allow-Methods": "GET",

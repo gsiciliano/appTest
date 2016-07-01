@@ -47,14 +47,14 @@
   \*************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var bootstrap = __webpack_require__(/*! bootstrap/dist/css/bootstrap.css */ 1);
-	var css = __webpack_require__(/*! ../css/index.css */ 2);
+	__webpack_require__(/*! bootstrap/dist/css/bootstrap.css */ 1);
+	__webpack_require__(/*! ../css/index.css */ 2);
 	var app = __webpack_require__ (/*! ./app */ 3);
 	var barcodeScanner = __webpack_require__(/*! ./scanner */ 6);
 	var utils  = __webpack_require__(/*! ./utils */ 7);
 	var render = __webpack_require__(/*! ./render */ 8);
 	var google = __webpack_require__(/*! ./google */ 9);
-	var geocode = __webpack_require__(/*! ./geocode */ 10)
+	var geocode = __webpack_require__(/*! ./geocode */ 10);
 	app.initialize(barcodeScanner,utils,render,google,geocode);
 
 /***/ },
@@ -92,14 +92,13 @@
 	    self:null,
 	    storage :null,
 	    // Application Constructor
-	    initialize: function(barcodeScanner,utils, render, google, geocode, storage) {
+	    initialize: function(barcodeScanner,utils, render, google, geocode) {
 	        this.bindEvents();
 	        this.barcodeScanner = barcodeScanner;
 	        this.utils = utils;
 	        this.render = render;
 	        this.google = google;
 	        this.geocode = geocode;
-	        this.storage = storage;
 	        self = this;
 	    },
 	    // Bind Event Listeners
@@ -114,7 +113,7 @@
 	    onDeviceReady: function() {
 	        this.receivedEvent();
 	        //var that = this;
-	        document.getElementById('myPos').textContent = 'wait for geolocation...';
+	        document.getElementById('myPos').innerHTML = 'wait for geolocation...';
 	        this.geocode.watchCurrPos(function(result){
 	            self.geocode.getAddrFromLatLng(result.latitude,result.longitude,self.render.renderGeocodeResult);
 	        });
@@ -130,7 +129,7 @@
 	        this.utils.hideClass('outDiv');
 	        var output = document.getElementById('output');
 	        if (output) {
-	            document.getElementById('outDiv').removeChild(output);
+	            document.getElementById('renderDiv').innerHTML='';
 	        }    
 	        document.getElementById('edtISBN').value = '';
 	    },
@@ -138,7 +137,7 @@
 	        event.preventDefault();
 	        this.utils.hideClass('app');
 	        this.utils.showClass('outDiv');
-	        document.getElementById('outDiv').appendChild(this.render.renderWaiting());
+	        document.getElementById('renderDiv').appendChild(this.render.renderWaiting());
 	        if (document.getElementById('edtISBN').value){
 	            this.searchBook(document.getElementById('edtISBN').value);
 	        } else {
@@ -149,7 +148,7 @@
 	        event.preventDefault();
 	        this.utils.hideClass('app');
 	        this.utils.showClass('outDiv');
-	        document.getElementById('outDiv').appendChild(this.render.renderWaiting());
+	        document.getElementById('renderDiv').appendChild(this.render.renderWaiting());
 	        this.geocode.getCurrPos(function(result){
 	            self.geocode.getNearByPlacesJS(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
 	        });    
@@ -180,13 +179,7 @@
 
 	var localforage = __webpack_require__(/*! localforage */ 5);
 	module.exports = {
-	    saveData: function(data){
-	        var isbn = null;
-	        for (i=0;i<data.industryIdentifiers.length;i++){
-	           if (data.industryIdentifiers[i].type == 'ISBN_13'){
-	              isbn = data.industryIdentifiers[i].identifier; 
-	           } 
-	        };
+	    saveData: function(isbn,data){
 	        localforage.setItem(isbn, JSON.stringify(data)).catch(function(err){
 	           console.log(err);
 	        });
@@ -2573,44 +2566,49 @@
 	module.exports =  {
 	    renderSearchResult: function(data){
 	        // data is volumeInfo
-	        document.getElementById('outDiv').removeChild(document.getElementById('msg'));
+	        document.getElementById('renderDiv').removeChild(document.getElementById('msg'));
+	        var baseDiv = document.createElement('ul');
+	        baseDiv.className = 'list-group';
+	        baseDiv.id='output';
 	        if (data){
-	            var baseDiv = document.createElement('div');
-	            baseDiv.id='output';
 	            if (data.title){
-	                var outDiv = document.createElement('div');
+	                var outDiv = document.createElement('li');
+	                outDiv.className = 'list-group-item'; 
 	                outDiv.innerHTML = 'Titolo: <b>'+data.title+'</b>';
-	                baseDiv.appendChild(outDiv);
-	            }    
-	            if (data.description){
-	                var outDiv = document.createElement('div');
-	                outDiv.innerHTML = 'Descr: <b>'+data.description+'</b>';
+	                if (data.description){
+	                    outDiv.innerHTML += '<br>Descr: <b>'+data.description+'</b>';
+	                }    
 	                baseDiv.appendChild(outDiv);
 	            }    
 	        } else {
-	            baseDiv.textContent = 'cannot find book!';
+	            var outDiv = document.createElement('li');
+	            outDiv.className = 'list-group-item list-group-item-danger'; 
+	            outDiv.innerHTML = 'cannot find book!';
+	            baseDiv.appendChild(outDiv);
 	        }    
-	        document.getElementById('outDiv').appendChild(baseDiv);
+	        document.getElementById('renderDiv').appendChild(baseDiv);
 	    },
 	    renderGeocodeResult: function(data){
 	        if (data){
 	            if (data.results.length > 0){
-	                document.getElementById('myPos').textContent = data.results[0].formatted_address;       
+	                document.getElementById('myPos').innerHTML = 'In questo momento ti trovi in: <br>'+data.results[0].formatted_address;       
 	            } else {
-	                document.getElementById('myPos').textContent = 'OOPS! no addresses';       
+	                document.getElementById('myPos').innerHTML = 'OOPS! no addresses';       
 	            }
 	        } else {
-	            document.getElementById('myPos').textContent = 'OOPS! render error';       
+	            document.getElementById('myPos').innerHTML = 'OOPS! render error';       
 	        }    
 	    },
 	    renderNearbyPlaces: function(data){
-	        document.getElementById('outDiv').removeChild(document.getElementById('msg'));
+	        document.getElementById('renderDiv').removeChild(document.getElementById('msg'));
 	        var baseDiv = document.createElement('div');
 	        baseDiv.id='output';
 	        if (data){
 	            var outUl = document.createElement('ul');
+	            outUl.className = 'list-group';
 	            for (i=0;i<data.length;i++){
 	                var outUlLi = document.createElement('li');
+	                outUlLi.className = 'list-group-item';
 	                outUlLi.innerHTML = '<b>'+data[i].name+'</b>'+'<br>'+data[i].vicinity;
 	                outUl.appendChild(outUlLi);
 	            }    
@@ -2618,7 +2616,7 @@
 	        } else {
 	            baseDiv.textContent = 'No places founded!';
 	        }
-	        document.getElementById('outDiv').appendChild(baseDiv);
+	        document.getElementById('renderDiv').appendChild(baseDiv);
 	    },
 	    renderWaiting: function(){
 	        var outDiv = document.createElement('div');
@@ -2648,18 +2646,23 @@
 	            /* here we save in storage volumeInfo */
 	            data = JSON.parse(request.responseText);
 	            if (data.totalItems > 0){
-	                storage.saveData(data.items[0].volumeInfo);  
+	                storage.saveData(isbn, data.items[0].volumeInfo);  
+	                fCallBack(data.items[0].volumeInfo);
+	            } else {
+	                fCallBack(null);
+	                console.log('book not find');
 	            }
-	            fCallBack(data.items[0].volumeInfo);
 	
 	          } else {
 	            // We reached our target server, but it returned an error
+	            fCallBack(null);
 	            console.log('error 1');
 	          }
 	        };
 	        request.onerror = function() {
-	          // There was a connection error of some sort
-	          console.log('error 2');
+	            // There was a connection error of some sort
+	            fCallBack(null);
+	            console.log('error 2');
 	        };
 	        request.send();        
 	    } 
@@ -2673,6 +2676,11 @@
   \***************************/
 /***/ function(module, exports) {
 
+	/*
+	 * Geocoding library
+	 */
+	
+	
 	module.exports = {
 	    getCurrPos: function(callback){
 	        navigator.geolocation.getCurrentPosition(

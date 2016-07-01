@@ -11,18 +11,23 @@ module.exports =  {
             /* here we save in storage volumeInfo */
             data = JSON.parse(request.responseText);
             if (data.totalItems > 0){
-                storage.saveData(data.items[0].volumeInfo);  
+                storage.saveData(isbn, data.items[0].volumeInfo);  
+                fCallBack(data.items[0].volumeInfo);
+            } else {
+                fCallBack(null);
+                console.log('book not find');
             }
-            fCallBack(data.items[0].volumeInfo);
 
           } else {
             // We reached our target server, but it returned an error
+            fCallBack(null);
             console.log('error 1');
           }
         };
         request.onerror = function() {
-          // There was a connection error of some sort
-          console.log('error 2');
+            // There was a connection error of some sort
+            fCallBack(null);
+            console.log('error 2');
         };
         request.send();        
     } 

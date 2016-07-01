@@ -1,3 +1,8 @@
+/*
+ * Geocoding library
+ */
+
+
 module.exports = {
     getCurrPos: function(callback){
         navigator.geolocation.getCurrentPosition(
