@@ -112,9 +112,17 @@
 	    // deviceready Event Handler
 	    onDeviceReady: function() {
 	        this.receivedEvent();
-	        //var that = this;
 	        document.getElementById('myPos').innerHTML = 'wait for geolocation...';
 	        this.geocode.watchCurrPos(function(result){
+	            storage.removeData('currentPos',function(status){
+	               if (status == 0){
+	                    var objCurrPos = {
+	                      'latitude':result.latitude,
+	                      'longitude':result.longitude
+	                    };
+	                    storage.saveData('currentPos', objCurrPos);
+	               } 
+	            });
 	            self.geocode.getAddrFromLatLng(result.latitude,result.longitude,self.render.renderGeocodeResult);
 	        });
 	        
@@ -149,9 +157,15 @@
 	        this.utils.hideClass('app');
 	        this.utils.showClass('outDiv');
 	        document.getElementById('renderDiv').appendChild(this.render.renderWaiting());
-	        this.geocode.getCurrPos(function(result){
-	            self.geocode.getNearByPlacesJS(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
-	        });    
+	        storage.getData('currentPos', function(result){
+	            if (result){
+	                self.geocode.getNearByPlacesJS(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
+	            } else {
+	                self.geocode.getCurrPos(function(result){
+	                    self.geocode.getNearByPlacesJS(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
+	                });    
+	            }
+	        });
 	/*        
 	        this call does not work in browser 
 	        this.geocode.getCurrPos(function(result){
@@ -179,8 +193,8 @@
 
 	var localforage = __webpack_require__(/*! localforage */ 5);
 	module.exports = {
-	    saveData: function(isbn,data){
-	        localforage.setItem(isbn, JSON.stringify(data)).catch(function(err){
+	    saveData: function(key,data){
+	        localforage.setItem(key, JSON.stringify(data)).catch(function(err){
 	           console.log(err);
 	        });
 	    },
@@ -188,6 +202,15 @@
 	        localforage.getItem(key).then(function(value){
 	            callback(JSON.parse(value));
 	        }).catch(function(err){
+	            callback(null);
+	            console.log(err);
+	        });
+	    },
+	    removeData: function(key,callback){
+	        localforage.removeItem(key).then(function(){
+	            callback(0);
+	        }).catch(function(err){
+	            callback(-1);
 	            console.log(err);
 	        });
 	    }

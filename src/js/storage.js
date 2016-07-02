@@ -1,7 +1,7 @@
 var localforage = require('localforage');
 module.exports = {
-    saveData: function(isbn,data){
-        localforage.setItem(isbn, JSON.stringify(data)).catch(function(err){
+    saveData: function(key,data){
+        localforage.setItem(key, JSON.stringify(data)).catch(function(err){
            console.log(err);
         });
     },
@@ -9,6 +9,15 @@ module.exports = {
         localforage.getItem(key).then(function(value){
             callback(JSON.parse(value));
         }).catch(function(err){
+            callback(null);
+            console.log(err);
+        });
+    },
+    removeData: function(key,callback){
+        localforage.removeItem(key).then(function(){
+            callback(0);
+        }).catch(function(err){
+            callback(-1);
             console.log(err);
         });
     }

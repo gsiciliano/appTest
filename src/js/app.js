@@ -28,9 +28,17 @@ module.exports = {
     // deviceready Event Handler
     onDeviceReady: function() {
         this.receivedEvent();
-        //var that = this;
         document.getElementById('myPos').innerHTML = 'wait for geolocation...';
         this.geocode.watchCurrPos(function(result){
+            storage.removeData('currentPos',function(status){
+               if (status == 0){
+                    var objCurrPos = {
+                      'latitude':result.latitude,
+                      'longitude':result.longitude
+                    };
+                    storage.saveData('currentPos', objCurrPos);
+               } 
+            });
             self.geocode.getAddrFromLatLng(result.latitude,result.longitude,self.render.renderGeocodeResult);
         });
         
@@ -65,9 +73,15 @@ module.exports = {
         this.utils.hideClass('app');
         this.utils.showClass('outDiv');
         document.getElementById('renderDiv').appendChild(this.render.renderWaiting());
-        this.geocode.getCurrPos(function(result){
-            self.geocode.getNearByPlacesJS(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
-        });    
+        storage.getData('currentPos', function(result){
+            if (result){
+                self.geocode.getNearByPlacesJS(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
+            } else {
+                self.geocode.getCurrPos(function(result){
+                    self.geocode.getNearByPlacesJS(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
+                });    
+            }
+        });
 /*        
         this call does not work in browser 
         this.geocode.getCurrPos(function(result){
