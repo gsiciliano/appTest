@@ -37,37 +37,64 @@
         <title>Test APP</title>
     </head>
     <body>
-        <div class="app" id="app">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="input-group">
-                        <h3>Benvenuto! </h3>
-                        <span id="myPos"></span>
-                    </div>                
-                    <div class="input-group">
-                    </div>                
-                    <div class="input-group">
-                        <a href="#" id='schNearby' class="btn btn-default btn-sm">
+        <nav class="navbar navbar-inverse">
+          <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">APPTEST</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+                  <li>
+                        <a href="#" data-action='schNearby'>
                             <span class="glyphicon glyphicon-map-marker"></span>
                             Cerca suole a 1km da te</a>
-                    </div>                
-                    <br>
-                    <div class="input-group">
-                        <input type='text' id='edtISBN' type="text" class="form-control" placeholder="inserisci ISBN">
-                    </div>                
-                    <div class="input-group">
-                        <a href="#" id='btnFind' class="btn btn-default btn-sm">
-                            <span class="glyphicon glyphicon-barcode"></span>
-                            Cerca/Scansiona ISBN</a>
-                    </div>                
+                  </li>
+              </ul>
+            </div>    
+        </nav>    
+        
+        <div class="container app" id="app">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3>Benvenuto! </h3>
+                    <h4><span id="myPos"></span></h4>
+                </div>
+            </div>    
+            <div class="row">
+                <div class="col-xs-12">
+                    <a href="#" data-action='schNearby' class="btn btn-default btn-lg btn-block">
+                        <span class="glyphicon glyphicon-map-marker"></span>
+                        Cerca suole a 1km da te</a>
+                </div>
+            </div>    
+            <p></p>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4>Ricerca dei libri</h4>
+                </div>    
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="input-group-lg">
+                        <input type='text' id='edtISBN' class="form-control" placeholder="inserisci ISBN" >
+                    </div>    
+                    <a href="#" id='btnFind' class="btn btn-default btn-lg btn-block">
+                        <span class="glyphicon glyphicon-barcode"></span>
+                        Cerca/Scansiona ISBN</a>
                 </div>    
             </div>    
         </div> 
-        <div class="app hidden"  id="outDiv">
+        <div class="container app hidden"  id="outDiv">
             <div class="row"> 
-                <div class="col-lg-12">
-            
-                    <a href="#" id='btnBack' class="btn btn-default btn-sm">
+                <div class="col-xs-12">
+                    <a href="#" id='btnBack' class="btn btn-default btn-lg btn-block">
                         <span class="glyphicon glyphicon-circle-arrow-left"></span>
                         Indietro</a>
                     <div id="renderDiv">

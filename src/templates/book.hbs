@@ -1,0 +1,14 @@
+<div id="output">
+    <ul class="list-group">
+        {{#if book}}
+            {{#if book.title}}
+                <li class="list-group-item">Titolo: <b>{{book.title}}</b></li>
+            {{/if}}
+            {{#if book.description}}
+                <li class="list-group-item">Descr: <b>{{book.description}}</b></li>
+            {{/if}}
+        {{else}}
+            <li class="list-group-item list-group-item-danger">cannot find book!</li>
+        {{/if}}
+    </ul>
+</div>

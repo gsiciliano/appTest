@@ -1,3 +1,4 @@
+var instantClick = require('instantclick2');
 var storage = require('./storage');
 module.exports = {
     barcodeScanner: null,
@@ -22,7 +23,12 @@ module.exports = {
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
         document.getElementById('btnFind').addEventListener('click', this.btnFindClick.bind(this), false);
-        document.getElementById('schNearby').addEventListener('click', this.btnSchNearby.bind(this), false);
+        //document.getElementById('schNearby').addEventListener('click', this.btnSchNearby.bind(this), false);
+        var placeBtns = document.querySelectorAll('[data-action="schNearby"');
+        for (var i = 0; i < placeBtns.length; i++) {
+            var button = placeBtns[i];
+            button.addEventListener('click', this.btnSchNearby.bind(this), false);
+        }        
         document.getElementById('btnBack').addEventListener('click', this.btnBack.bind(this), false);
     },
     // deviceready Event Handler
@@ -46,6 +52,10 @@ module.exports = {
     // Update DOM on a Received Event
     receivedEvent: function() {
         console.log('Received Event: Device ready');
+        instantClick.init({
+            preloadingMode: 50, //Mouseover duration before preload is triggered
+            preloadCacheTimeLimit: 30000 //How long to cache preloaded pages
+        });
     },
     btnBack: function(event){
         event.preventDefault();

@@ -1,3 +1,4 @@
+var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var path = require("path");
 module.exports = {
@@ -42,7 +43,7 @@ module.exports = {
                 loader: 'url?limit=10000&mimetype=image/svg+xml'
             },
             {
-                test: /\.handlebars$/,
+                test: /\.hbs$/,
                 loader: "handlebars-loader"
             }
         ]
@@ -50,6 +51,11 @@ module.exports = {
     plugins: [
         new ExtractTextPlugin('style.bundle.css', {
             allChunks: true
+        }),
+        new webpack.ProvidePlugin({
+            jQuery: 'jquery',
+            $: 'jquery',
+            jquery: 'jquery'        
         })
     ]
 };

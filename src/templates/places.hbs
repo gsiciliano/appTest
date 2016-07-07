@@ -1,0 +1,11 @@
+<div id="output">
+    <ul class="list-group">
+        {{#if places}}
+            {{#each places}}
+                <li class="list-group-item"><b>{{name}}</b><br>{{vicinity}}</li>
+            {{/each}}    
+        {{else}}
+            <li class="list-group-item list-group-item-danger">No places founded!</li>
+        {{/if}}
+    </ul>
+</div>
