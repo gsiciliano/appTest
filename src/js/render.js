@@ -3,7 +3,6 @@ var placesTemplate = require('../templates/places.hbs');
 module.exports =  {
     renderSearchResult: function(data){
         // data is volumeInfo
-        document.getElementById('renderDiv').removeChild(document.getElementById('msg'));
         document.getElementById('renderDiv').innerHTML = bookTemplate({
             'book': data
         });  
@@ -20,15 +19,8 @@ module.exports =  {
         }    
     },
     renderNearbyPlaces: function(data){
-        document.getElementById('renderDiv').removeChild(document.getElementById('msg'));
         document.getElementById('renderDiv').innerHTML = placesTemplate({
             'places': data
         });
     },
-    renderWaiting: function(){
-        var outDiv = document.createElement('div');
-        outDiv.id = 'msg';
-        outDiv.innerHTML = '<img src="img/loading.gif" style="width:100%;heght:100%">';
-        return outDiv;
-    }
 };

@@ -1,5 +1,6 @@
 var instantClick = require('instantclick2');
 var storage = require('./storage');
+var spinner = require('./spinner');
 module.exports = {
     barcodeScanner: null,
     utils: null,
@@ -23,8 +24,7 @@ module.exports = {
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
         document.getElementById('btnFind').addEventListener('click', this.btnFindClick.bind(this), false);
-        //document.getElementById('schNearby').addEventListener('click', this.btnSchNearby.bind(this), false);
-        var placeBtns = document.querySelectorAll('[data-action="schNearby"');
+        var placeBtns = document.querySelectorAll('[data-action="schNearby"]');
         for (var i = 0; i < placeBtns.length; i++) {
             var button = placeBtns[i];
             button.addEventListener('click', this.btnSchNearby.bind(this), false);
@@ -60,7 +60,7 @@ module.exports = {
     btnBack: function(event){
         event.preventDefault();
         this.utils.showClass('app');
-        this.utils.hideClass('outDiv');
+        this.utils.hideClass('result');
         var output = document.getElementById('output');
         if (output) {
             document.getElementById('renderDiv').innerHTML='';
@@ -70,8 +70,9 @@ module.exports = {
     btnFindClick: function(event){
         event.preventDefault();
         this.utils.hideClass('app');
-        this.utils.showClass('outDiv');
-        document.getElementById('renderDiv').appendChild(this.render.renderWaiting());
+        this.utils.showClass('result');
+        var container = document.getElementById('renderDiv');
+        spinner.spin(container);
         if (document.getElementById('edtISBN').value){
             this.searchBook(document.getElementById('edtISBN').value);
         } else {
@@ -81,8 +82,9 @@ module.exports = {
     btnSchNearby: function(event){
         event.preventDefault();
         this.utils.hideClass('app');
-        this.utils.showClass('outDiv');
-        document.getElementById('renderDiv').appendChild(this.render.renderWaiting());
+        this.utils.showClass('result');
+        var container = document.getElementById('renderDiv');
+        spinner.spin(container);
         storage.getData('currentPos', function(result){
             if (result){
                 self.geocode.getNearByPlacesJS(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);

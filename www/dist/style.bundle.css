@@ -6761,4 +6761,9 @@ button.close {
 .hidden {
   display:none;
 }
+.spinner {
+    position: fixed !important;
+    left:50%;
+    top:50%;
+}
 /*# sourceMappingURL=style.bundle.css.map*/

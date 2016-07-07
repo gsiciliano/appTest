@@ -1,10 +1,7 @@
 var spinner = require('spin');
 module.exports = {
     spin: function (container) {
-        this.hideContents();
         var s = new spinner().spin();
-        container.style.display = 'block';
-        container.innerHTML = '';
         container.appendChild(s.el);
     },
 
