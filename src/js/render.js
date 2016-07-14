@@ -23,4 +23,7 @@ module.exports =  {
             'places': data
         });
     },
+    renderSpeechText: function(data){
+        document.getElementById('renderDiv').innerHTML = data;
+    }
 };

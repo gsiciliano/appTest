@@ -11,4 +11,4 @@ module.exports = {
             contentResult[i].style.display = 'none';
         }
     }    
-}
+};

@@ -1,6 +1,7 @@
 var instantClick = require('instantclick2');
 var storage = require('./storage');
 var spinner = require('./spinner');
+var speechRec = require('./speechRecognition');
 module.exports = {
     barcodeScanner: null,
     utils: null,
@@ -28,6 +29,11 @@ module.exports = {
         for (var i = 0; i < placeBtns.length; i++) {
             var button = placeBtns[i];
             button.addEventListener('click', this.btnSchNearby.bind(this), false);
+        }        
+        var placeBtns = document.querySelectorAll('[data-action="speech"]');
+        for (var i = 0; i < placeBtns.length; i++) {
+            var button = placeBtns[i];
+            button.addEventListener('click', this.btnSpeech.bind(this), false);
         }        
         document.getElementById('btnBack').addEventListener('click', this.btnBack.bind(this), false);
     },
@@ -100,6 +106,14 @@ module.exports = {
             self.geocode.getNearByPlaces(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
         });
 */
+    },
+    btnSpeech: function(event){
+        event.preventDefault();
+        this.utils.hideClass('app');
+        this.utils.showClass('result');
+        var container = document.getElementById('renderDiv');
+        spinner.spin(container);
+        speechRec.speech();
     },
     searchBook: function(isbn){
         storage.getData(isbn, function(result){

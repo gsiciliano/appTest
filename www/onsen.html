@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <title>Onsen UI</title>
+
+<!-- CSS dependencies -->
+  <link rel="stylesheet" href="dist/style.bundle.css"> 
+<!--  <link rel="stylesheet" href="lib/onsen/css/onsenui.css"> -->
+<!--  <link rel="stylesheet" href="lib/onsen/css/onsen-css-components.css"> -->
+
+</head>
+<body>
+  <!-- Cordova reference -->
+  <script src="cordova.js"></script>
+  <script src="dist/onsen.bundle.js"></script> 
+
+  <!-- App layout -->
+  <ons-tabbar>
+    <ons-tab label="Tab 1" page="tab1.html" active>
+    </ons-tab>
+    <ons-tab label="Tab 2" page="tab2.html">
+    </ons-tab>
+  </ons-tabbar>
+
+  <ons-template id="tab1.html">
+    <ons-page>
+      <ons-toolbar>
+        <div class="center">Tab 1</div>
+      </ons-toolbar>
+
+      <p style="text-align: center;">
+        This is the first page.
+      </p>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="tab2.html">
+    <ons-page>
+      <ons-toolbar>
+        <div class="center">Tab 2</div>
+      </ons-toolbar>
+
+      <p style="text-align: center;">
+        This is the second page.
+      </p>
+    </ons-page>
+  </ons-template>
+
+</body>
+</html>

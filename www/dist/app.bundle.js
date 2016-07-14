@@ -47,6 +47,8 @@
   \*************************/
 /***/ function(module, exports, __webpack_require__) {
 
+	__webpack_require__(/*! onsenui/css/onsenui.css */ 53);
+	__webpack_require__(/*! onsenui/css/onsen-css-components.css */ 54);
 	__webpack_require__(/*! bootstrap/dist/css/bootstrap.css */ 1);
 	__webpack_require__(/*! ../css/index.css */ 2);
 	var bootstrap = __webpack_require__(/*! bootstrap */ 3);
@@ -12607,6 +12609,7 @@
 	var instantClick = __webpack_require__(/*! instantclick2 */ 18);
 	var storage = __webpack_require__(/*! ./storage */ 19);
 	var spinner = __webpack_require__(/*! ./spinner */ 21);
+	var speechRec = __webpack_require__(/*! ./speechRecognition */ 55);
 	module.exports = {
 	    barcodeScanner: null,
 	    utils: null,
@@ -12634,6 +12637,11 @@
 	        for (var i = 0; i < placeBtns.length; i++) {
 	            var button = placeBtns[i];
 	            button.addEventListener('click', this.btnSchNearby.bind(this), false);
+	        }        
+	        var placeBtns = document.querySelectorAll('[data-action="speech"]');
+	        for (var i = 0; i < placeBtns.length; i++) {
+	            var button = placeBtns[i];
+	            button.addEventListener('click', this.btnSpeech.bind(this), false);
 	        }        
 	        document.getElementById('btnBack').addEventListener('click', this.btnBack.bind(this), false);
 	    },
@@ -12706,6 +12714,14 @@
 	            self.geocode.getNearByPlaces(1000,'school',result.latitude,result.longitude,self.render.renderNearbyPlaces);
 	        });
 	*/
+	    },
+	    btnSpeech: function(event){
+	        event.preventDefault();
+	        this.utils.hideClass('app');
+	        this.utils.showClass('result');
+	        var container = document.getElementById('renderDiv');
+	        spinner.spin(container);
+	        speechRec.speech();
 	    },
 	    searchBook: function(isbn){
 	        storage.getData(isbn, function(result){
@@ -15722,7 +15738,7 @@
 	            contentResult[i].style.display = 'none';
 	        }
 	    }    
-	}
+	};
 
 /***/ },
 /* 22 */
@@ -16125,6 +16141,9 @@
 	            'places': data
 	        });
 	    },
+	    renderSpeechText: function(data){
+	        document.getElementById('renderDiv').innerHTML = data;
+	    }
 	};
 
 /***/ },
@@ -16146,21 +16165,21 @@
 	
 	  return "                <li class=\"list-group-item\">Titolo: <b>"
 	    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.book : depth0)) != null ? stack1.title : stack1), depth0))
-	    + "</b></li>\r\n";
+	    + "</b></li>\n";
 	},"4":function(container,depth0,helpers,partials,data) {
 	    var stack1;
 	
 	  return "                <li class=\"list-group-item\">Descr: <b>"
 	    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.book : depth0)) != null ? stack1.description : stack1), depth0))
-	    + "</b></li>\r\n";
+	    + "</b></li>\n";
 	},"6":function(container,depth0,helpers,partials,data) {
-	    return "            <li class=\"list-group-item list-group-item-danger\">cannot find book!</li>\r\n";
+	    return "            <li class=\"list-group-item list-group-item-danger\">cannot find book!</li>\n";
 	},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
 	    var stack1;
 	
-	  return "<div id=\"output\">\r\n    <ul class=\"list-group\">\r\n"
+	  return "<div id=\"output\">\n    <ul class=\"list-group\">\n"
 	    + ((stack1 = helpers["if"].call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.book : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(6, data, 0),"data":data})) != null ? stack1 : "")
-	    + "    </ul>\r\n</div>";
+	    + "    </ul>\n</div>";
 	},"useData":true});
 
 /***/ },
@@ -17415,15 +17434,15 @@
 	    + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
 	    + "</b><br>"
 	    + alias4(((helper = (helper = helpers.vicinity || (depth0 != null ? depth0.vicinity : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"vicinity","hash":{},"data":data}) : helper)))
-	    + "</li>\r\n";
+	    + "</li>\n";
 	},"4":function(container,depth0,helpers,partials,data) {
-	    return "            <li class=\"list-group-item list-group-item-danger\">No places founded!</li>\r\n";
+	    return "            <li class=\"list-group-item list-group-item-danger\">No places founded!</li>\n";
 	},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
 	    var stack1;
 	
-	  return "<div id=\"output\">\r\n    <ul class=\"list-group\">\r\n"
+	  return "<div id=\"output\">\n    <ul class=\"list-group\">\n"
 	    + ((stack1 = helpers["if"].call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.places : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(4, data, 0),"data":data})) != null ? stack1 : "")
-	    + "    </ul>\r\n</div>";
+	    + "    </ul>\n</div>";
 	},"useData":true});
 
 /***/ },
@@ -17564,6 +17583,46 @@
 	                  }
 	            });
 	        
+	    }
+	};
+
+/***/ },
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */
+/*!***********************************!*\
+  !*** ./~/onsenui/css/onsenui.css ***!
+  \***********************************/
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 54 */
+/*!************************************************!*\
+  !*** ./~/onsenui/css/onsen-css-components.css ***!
+  \************************************************/
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 55 */
+/*!*************************************!*\
+  !*** ./src/js/speechRecognition.js ***!
+  \*************************************/
+/***/ function(module, exports) {
+
+	module.exports = {
+	    speech: function(){
+	        recognition = new SpeechRecognition();
+	        recognition.onresult = function(event) {
+	            //document.getElementById('renderDiv').innerHTML = event.results[0][0].transcript;
+	            this.render.renderSpeechText(event.results[0][0].transcript);
+	        };
+	        recognition.start();    
 	    }
 	};
 

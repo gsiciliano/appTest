@@ -1,3 +1,5 @@
+require('onsenui/css/onsenui.css');
+require('onsenui/css/onsen-css-components.css');
 require('bootstrap/dist/css/bootstrap.css');
 require('../css/index.css');
 var bootstrap = require('bootstrap');

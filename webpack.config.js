@@ -3,7 +3,8 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var path = require("path");
 module.exports = {
     entry: {
-            app: './src/js/index' 
+            app:     './src/js/index',
+            onsen:   './src/js/onsen'
     },
     output: {
         path: path.resolve(__dirname, "www/dist"),
@@ -22,8 +23,7 @@ module.exports = {
     module: {
         loaders: [
             {
-                test: /\.css$/,
-                // loader: 'style-loader!css-loader'
+                test: /\index.css$/,
                 loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
             },
             {
